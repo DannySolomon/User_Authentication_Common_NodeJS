@@ -12,3 +12,6 @@ app.listen(port, function (err) {
 });
 
 app.use("/", expressRouter);
+
+app.set("view engine", "ejs");
+app.set("views", "./views");
