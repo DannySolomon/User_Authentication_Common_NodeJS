@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const passport = require("../config/passport");
+const passport = require("passport");
+const passportlocal = require("../config/passport-local");
+const passportgoogle = require("../config/passport-google-oauth2");
 
 const usersController = require("../controllers/users_controller");
 
@@ -26,5 +28,19 @@ router.get("/logout", function (req, res, next) {
     res.redirect("/users/signin");
   });
 });
+
+router.get(
+  "/auth/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
+
+router.get(
+  "/auth/google/callback",
+  passport.authenticate("google", {
+    successRedirect: "/users/profile",
+    failureRedirect: "/users/signin",
+    failureFlash: true, //if failure send a flash message
+  })
+);
 
 module.exports = router;

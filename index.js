@@ -8,6 +8,8 @@ const session = require("express-session");
 const flash = require("connect-flash");
 
 const passport = require("passport");
+const passportLocal = require("./config/passport-local");
+const passportGoogle = require("./config/passport-google-oauth2");
 
 const app = express();
 const port = 8000;

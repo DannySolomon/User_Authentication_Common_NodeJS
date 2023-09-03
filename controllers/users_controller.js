@@ -90,5 +90,3 @@ module.exports.create = function (req, res) {
     });
   }
 };
-
-module.exports.signinhandle = function (req, res) {};
