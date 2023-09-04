@@ -1,2 +1,3 @@
 node_modules/
-config/secret_keys.js
+config\secret_keys.js
+views/
