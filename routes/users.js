@@ -29,6 +29,7 @@ router.get("/logout", function (req, res, next) {
   });
 });
 
+//google strategy
 router.get(
   "/auth/google",
   passport.authenticate("google", { scope: ["profile", "email"] })
@@ -42,5 +43,14 @@ router.get(
     failureFlash: true, //if failure send a flash message
   })
 );
+
+//password reset after login
+router.get(
+  "/password/reset",
+  passport.checkAuthentication,
+  usersController.displayResetPassword
+);
+
+router.post("/password/reset", usersController.resetPassword);
 
 module.exports = router;

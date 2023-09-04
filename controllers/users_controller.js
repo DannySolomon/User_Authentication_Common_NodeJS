@@ -90,3 +90,78 @@ module.exports.create = function (req, res) {
     });
   }
 };
+
+//reset passowrd screen
+module.exports.displayResetPassword = function (req, res) {
+  return res.render("reset");
+};
+
+module.exports.resetPassword = function (req, res) {
+  const { password1, password2 } = req.body;
+  let errors = [];
+
+  //check required fileds
+  if (!password1 || !password2) {
+    errors.push({ msg: "Please fill in all the fields" });
+  }
+
+  //check password match
+  if (password1 !== password2) {
+    errors.push({ msg: "Passwords do not match" });
+  }
+
+  //check password length
+  if (password1.length < 6) {
+    errors.push({ msg: "Password should be atleast 6 chars long" });
+  }
+
+  if (errors.length > 0) {
+    res.render("reset", {
+      errors,
+    });
+  } else {
+    // encrypting password
+    //hasing using bcrypt
+    bcrypt.hash(password1, 10, function (err, hash) {
+      // Store hash in your password DB.
+      if (err) throw err;
+
+      //set password to hash
+      let encryptedpassowrd = hash;
+
+      User.findOne({ email: req.user.email })
+        .then((user) => {
+          if (user) {
+            user.password = encryptedpassowrd;
+            user
+              .save()
+              .then(() => {
+                console.log("Successfully updated the password");
+                req.flash(
+                  "successMessage",
+                  "The password has been successfully updated"
+                );
+                res.redirect("reset");
+              })
+              .catch((err) => {
+                console.log("Error in updating the passowrd");
+                req.flash("errorMessage", "Your password couldnt be updated");
+                res.redirect("reset");
+              });
+          } else {
+            errors.push({ msg: "Error in finding the user" });
+            res.render("signin", {
+              errors,
+            });
+          }
+        })
+        .catch((err) => {
+          console.log("Error in accessing db");
+          errors.push({ msg: "Error in accessing the db" });
+          res.render("signin", {
+            errors,
+          });
+        });
+    });
+  }
+};

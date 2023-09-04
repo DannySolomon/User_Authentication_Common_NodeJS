@@ -14,7 +14,6 @@ passport.use(
     function (accessToken, refreshToken, profile, cb) {
       User.findOne({ email: profile.emails[0].value })
         .then((user) => {
-          console.log(profile);
           if (user) {
             //if found, set this user as req.user
             return cb(null, user);
