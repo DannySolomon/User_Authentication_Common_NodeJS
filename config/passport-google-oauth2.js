@@ -9,7 +9,7 @@ passport.use(
     {
       clientID: secretKeys.GOOGLE_CLIENT_ID,
       clientSecret: secretKeys.GOOGLE_CLIENT_SECRET,
-      callbackURL: "http://localhost:8000/users/auth/google/callback",
+      callbackURL: "https://user-authentication-common-nodejs.onrender.com/users/auth/google/callback",
     },
     function (accessToken, refreshToken, profile, cb) {
       User.findOne({ email: profile.emails[0].value })
